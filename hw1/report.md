@@ -10,7 +10,7 @@ NetID: shuyuel2
 
 ##### (a) Max and min:
 
-![1537246572900](shuyuel2_hw1.assets/1537246572900.png)
+![1537246572900](report.assets/1537246572900.png)
 
 - Max: 
   - Midterm = 99
@@ -21,7 +21,7 @@ NetID: shuyuel2
 
 ##### (b) Mean, mode and median:
 
-![1537246604728](shuyuel2_hw1.assets/1537246604728.png)
+![1537246604728](report.assets/1537246604728.png)
 
 - Mean:
   - Midterm:  88.7
@@ -35,11 +35,11 @@ NetID: shuyuel2
 
 ##### (c) First quartile, third quartile and inter-quartile range:
 
-![1537246629086](shuyuel2_hw1.assets/1537246629086.png)
+![1537246629086](report.assets/1537246629086.png)
 
 - Midterm:
 
-  ![1537059350850](shuyuel2_hw1.assets/1537059350850.png)
+  ![1537059350850](report.assets/1537059350850.png)
 
   - First Quartile:  84
   - Third Quartile: 96
@@ -47,7 +47,7 @@ NetID: shuyuel2
 
 - Final:
 
-  ![1537059515656](shuyuel2_hw1.assets/1537059515656.png)
+  ![1537059515656](report.assets/1537059515656.png)
 
   - - First Quartile:  80
     - Third Quartile: 95
@@ -55,7 +55,7 @@ NetID: shuyuel2
 
 ##### (d) Variance(sample & population):
 
-![1537246653015](shuyuel2_hw1.assets/1537246653015.png)
+![1537246653015](report.assets/1537246653015.png)
 
 - Population:
 
@@ -75,6 +75,7 @@ $$
   $$
 
 
+
 - Midterm: 
   - Population Variance: 58.610
   - Sample Variance: 65.122
@@ -84,12 +85,13 @@ $$
 
 ##### (e) Standard Deviation (sample & population):
 
-![1537246675453](shuyuel2_hw1.assets/1537246675453.png)
+![1537246675453](report.assets/1537246675453.png)
 
 - Standard Deviation:
   $$
   Std = \sqrt{Var}
   $$
+
 
 
 - Midterm: 
@@ -107,7 +109,7 @@ $$
 
 ##### (a) Min-Max Normalization:
 
-![1537246838001](shuyuel2_hw1.assets/1537246838001.png)
+![1537246838001](report.assets/1537246838001.png)
 
 - $$
   v' = \frac{v -min}{max - min}*(newMax - newMin )  + newMin
@@ -137,7 +139,7 @@ $$
 
 ##### (c) Z-Score Normalization of final scores:
 
-![1537246869028](shuyuel2_hw1.assets/1537246869028.png)
+![1537246869028](report.assets/1537246869028.png)
 
 - $$
   v' = \frac{v - \mu}{\sigma}
@@ -151,7 +153,7 @@ $$
 
 ##### (d) Variance(population) of z-score normalized final score:
 
-![1537246891818](shuyuel2_hw1.assets/1537246891818.png)
+![1537246891818](report.assets/1537246891818.png)
 
 - Variance (Population):
   $$
@@ -171,7 +173,7 @@ $$
 
 ##### (a) Covariance(Population):
 
-![1537246908132](shuyuel2_hw1.assets/1537246908132.png)
+![1537246908132](report.assets/1537246908132.png)
 $$
 Cov = E[(x_1-\mu_1)*(x_2=\mu_2)]=E(x_1*x_2)-\mu_1*\mu_2
 $$
@@ -180,7 +182,7 @@ $$
 
 ##### (b)Pearson's Correlation Coefficient(population standard deviation and covariance):
 
-![1537246923005](shuyuel2_hw1.assets/1537246923005.png)
+![1537246923005](report.assets/1537246923005.png)
 
 - $$
   Pearson = \frac{cov(x_1, x_2)}{\sigma_{x_1} * \sigma_{x_2}}
@@ -194,17 +196,14 @@ $$
 
 ##### (d)  Distance 
 
-![1537246995759](shuyuel2_hw1.assets/1537246995759.png)
+![1537246995759](report.assets/1537246995759.png)
 
-![1537247014050](shuyuel2_hw1.assets/1537247014050.png)
+![1537247014050](report.assets/1537247014050.png)
 
 - Minkowski Distance:
   $$
   d_{ij} = \sqrt[p]{|x_{i1}-x_{j1}|^{p}+|x_{i2}-x_{j2}|^{p}+L+|x_{il}-x_{jl}|^{p}}
   $$
-
-
-
 
 
 
@@ -261,10 +260,12 @@ I don't think using Kullback-Leibler Divergence is a good choice since the model
   $$
 
 
+
 - Jaccard:
   $$
   Jaccard= \frac{|a\cap b|}{|A| + |B| - |A \cap B|)}
   $$
+
 
 
 ## Problem 4 
@@ -275,7 +276,7 @@ $$
 X^2=\sum_{i=1}^{n}\frac{(O_i-E_i)^2}{E_i}
 $$
 
-![1537244525600](shuyuel2_hw1.assets/1537244525600.png)
+![1537244525600](report.assets/1537244525600.png)
 
 ##### (b) 
 	We can reject the null hypothesis of independence at a confidence level of 0.001. Therefore, "purchasing beer" and "purchasing diaper" are correlated.
@@ -286,14 +287,14 @@ $$
 
 ##### (d) Kullback-Leibler Divergence
 
-![1537247055014](shuyuel2_hw1.assets/1537247055014.png)
+![1537247055014](report.assets/1537247055014.png)
 $$
 D_{kL}(p(x)||q(x))=\sum q(x) * ln\frac{p(x)}{q(x)}
 $$
   	p = [0.061 0.030 0.909]
 
 	q = [0.5 0.3 0.2 ]
-
+	
 	KL = 1.440
 
 
