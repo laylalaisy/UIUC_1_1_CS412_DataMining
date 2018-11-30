@@ -22,15 +22,15 @@ def read_data(dir, file_name):
 	return data
 
 
-def get_label_num(data):
-	label_num = 0
+def get_attr_num(data):
+	attr_num = 0
 	attribute_len = len(data[0])-1
 	for attribute_idx in range(1, attribute_len+1):
 		# get value of each attribute
 		attribute_set = set([sample[attribute_idx] for sample in data])
-		label_num = label_num + len(attribute_set)
+		attr_num = attr_num + len(attribute_set)
 
-	return label_num
+	return attr_num
 
 
 def get_counts(data):
@@ -77,7 +77,7 @@ def vote_majority(data):
 	return label
 
 
-def build_decision_tree(data, threshold, label_num):
+def build_decision_tree(data, threshold, attr_num):
 	# recursively build decision tree until current_gain == 0
 	attribute_len = len(data[0])-1
 	sample_len = len(data)
@@ -103,9 +103,9 @@ def build_decision_tree(data, threshold, label_num):
 				best_right = child2
 
 	if min_gain > threshold:
-		if label_num > 0 and len(best_left) != 0 and len(best_right) != 0:
-			left_tree = build_decision_tree(best_left, threshold, label_num-1)
-			right_tree = build_decision_tree(best_right, threshold, label_num-1)
+		if attr_num > 0 and len(best_left) != 0 and len(best_right) != 0:
+			left_tree = build_decision_tree(best_left, threshold, attr_num-1)
+			right_tree = build_decision_tree(best_right, threshold, attr_num-1)
 			return DecisionTree(attr=best_attr, value=best_value, left=left_tree, right=right_tree)
 		else:
 			label = vote_majority(data)
@@ -118,8 +118,6 @@ def build_decision_tree(data, threshold, label_num):
 
 def predict(test_data, decision_tree):
 	prediction = []
-	accurate = 0
-	total = len(test_data)
 	for sample in test_data:
 		node = decision_tree
 
@@ -131,12 +129,26 @@ def predict(test_data, decision_tree):
 				node = node.right
 		prediction.append(node.label)
 
-		# get accuracy
-		if(node.label == sample[0]):
-			accurate = accurate + 1
-
-	accuracy = float(accurate/total)
 	return prediction, accuracy
+
+def get_confusion_matrix(data, prediction):
+	label_set = set([sample[0] for sample in data])
+	label_num = len(label_set)
+
+	# initialize
+	line = []
+	matrix = []
+	for i in range(label_num):
+		for j in range(label_num):
+			line.append(0)
+		matrix.append(line)
+
+	for i in range(len(data)):
+		true = int(data[i][0])-1
+		predict = int(prediction[i])-1
+		matrix[true][predict] = matrix[true][predict] + 1
+
+	return matrix 
 
 
 if __name__ == "__main__":
@@ -152,24 +164,26 @@ if __name__ == "__main__":
 	test_data = read_data(dir, test_file_name)
 
 	if train_file_name == "balance.scale.train":
-		threshold = 0.0
+		threshold = 0.1
 	elif train_file_name == "nursery.train":
 		threshold = 0.0
 	elif train_file_name == "led.train":
-		threshold = 0.0
+		threshold = 0.2
 	elif train_file_name == "synthetic.social.train":
-		threshold = 0.0
+		threshold = 0.1
 	else:
 		threshold = 0.0
 
 	# get label number
-	label_num = get_label_num(train_data)
+	attr_num = get_attr_num(train_data)
 
 	# build decision tree
-	decision_tree = build_decision_tree(train_data, threshold, label_num)
+	decision_tree = build_decision_tree(train_data, threshold, attr_num)
 
 	# predict testing data
-	prediction, accuracy = predict(test_data, decision_tree)
-	print(accuracy)
+	prediction = predict(test_data, decision_tree)
+
+	# get confusion_matrix
+	confusion_matrix = get_confusion_matrix(test_data, prediction)
 
 
