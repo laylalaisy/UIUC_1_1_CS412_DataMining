@@ -1,15 +1,16 @@
 import sys
 import os
 
-threshold = 0.0
+threshold = 0.5
 
 class DecisionTree:
-	def __init__(self, attr=None, value=None, left=None, right=None, data=None):
+	def __init__(self, attr=None, value=None, left=None, right=None, data=None, label=None):
 		self.attr = attr
 		self.value = value
 		self.left = left
 		self.right = right
 		self.data = data
+		self.label = label
 
 
 def read_data(dir, file_name):
@@ -109,4 +110,4 @@ if __name__ == "__main__":
 
 	# build decision tree
 	decision_tree = build_decision_tree(train_data)
-	print(decision_tree.value)
+
