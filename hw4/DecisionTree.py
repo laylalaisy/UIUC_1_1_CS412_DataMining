@@ -79,7 +79,7 @@ def vote_majority(data):
 
 def build_decision_tree(data, threshold, label_num):
 	# recursively build decision tree until current_gain == 0
-	attribute_len = 7 #len(data[0])-1
+	attribute_len = len(data[0])-1
 	sample_len = len(data)
 	
 	min_gain = float("inf")
@@ -152,7 +152,7 @@ if __name__ == "__main__":
 	test_data = read_data(dir, test_file_name)
 
 	if train_file_name == "balance.scale.train":
-		threshold = 0.1
+		threshold = 0.0
 	elif train_file_name == "nursery.train":
 		threshold = 0.0
 	elif train_file_name == "led.train":
