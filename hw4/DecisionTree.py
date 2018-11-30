@@ -1,7 +1,8 @@
 import sys
 import os
 
-threshold = 0.5
+threshold = 0.0
+
 
 class DecisionTree:
 	def __init__(self, attr=None, value=None, left=None, right=None, data=None, label=None):
@@ -61,6 +62,12 @@ def split_node(data, value, attribute_idx):
 	return child1, child2
 
 
+def vote_majority(data):
+	counts = get_counts(data)
+	label = max(counts, key=counts.get)
+
+	return label
+
 
 def build_decision_tree(data):
 	# recursively build decision tree until current_gain == 0
@@ -92,8 +99,31 @@ def build_decision_tree(data):
 		right_tree = build_decision_tree(best_right)
 		return DecisionTree(attr=best_attr, value=best_value, left=left_tree, right=right_tree)
 	else:
-		return DecisionTree(data=data)
+		label = vote_majority(data)
+		return DecisionTree(data=data, label=label)
 
+
+def predict(test_data, decision_tree):
+	prediction = []
+	accurate = 0
+	total = len(test_data)
+	for sample in test_data:
+		node = decision_tree
+
+		# predict
+		while node.label == None:
+			if sample[node.attr] == node.value:
+				node = node.left
+			else:
+				node = node.right
+		prediction.append(node.label)
+
+		# get accuracy
+		if(node.label == sample[0]):
+			accurate = accurate + 1
+
+	accuracy = float(accurate/total)
+	return prediction, accuracy
 
 
 if __name__ == "__main__":
@@ -110,4 +140,10 @@ if __name__ == "__main__":
 
 	# build decision tree
 	decision_tree = build_decision_tree(train_data)
+
+	# predict testing data
+	prediction, accuracy = predict(test_data, decision_tree)
+
+	print(accuracy)
+
 
