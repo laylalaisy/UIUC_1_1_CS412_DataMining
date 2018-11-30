@@ -1,9 +1,6 @@
 import sys
 import os
 
-threshold = 0.0
-
-
 class DecisionTree:
 	def __init__(self, attr=None, value=None, left=None, right=None, data=None, label=None):
 		self.attr = attr
@@ -23,6 +20,17 @@ def read_data(dir, file_name):
 		data.append(line.split())
 
 	return data
+
+
+def get_label_num(data):
+	label_num = 0
+	attribute_len = len(data[0])-1
+	for attribute_idx in range(1, attribute_len+1):
+		# get value of each attribute
+		attribute_set = set([sample[attribute_idx] for sample in data])
+		label_num = label_num + len(attribute_set)
+
+	return label_num
 
 
 def get_counts(data):
@@ -69,9 +77,9 @@ def vote_majority(data):
 	return label
 
 
-def build_decision_tree(data):
+def build_decision_tree(data, threshold, label_num):
 	# recursively build decision tree until current_gain == 0
-	attribute_len = len(data[0])-1
+	attribute_len = 7 #len(data[0])-1
 	sample_len = len(data)
 	
 	min_gain = float("inf")
@@ -95,12 +103,17 @@ def build_decision_tree(data):
 				best_right = child2
 
 	if min_gain > threshold:
-		left_tree = build_decision_tree(best_left)
-		right_tree = build_decision_tree(best_right)
-		return DecisionTree(attr=best_attr, value=best_value, left=left_tree, right=right_tree)
+		if label_num > 0 and len(best_left) != 0 and len(best_right) != 0:
+			left_tree = build_decision_tree(best_left, threshold, label_num-1)
+			right_tree = build_decision_tree(best_right, threshold, label_num-1)
+			return DecisionTree(attr=best_attr, value=best_value, left=left_tree, right=right_tree)
+		else:
+			label = vote_majority(data)
+			return DecisionTree(data=data, label=label)
 	else:
 		label = vote_majority(data)
 		return DecisionTree(data=data, label=label)
+
 
 
 def predict(test_data, decision_tree):
@@ -138,12 +151,25 @@ if __name__ == "__main__":
 	train_data = read_data(dir, train_file_name)
 	test_data = read_data(dir, test_file_name)
 
+	if train_file_name == "balance.scale.train":
+		threshold = 0.1
+	elif train_file_name == "nursery.train":
+		threshold = 0.0
+	elif train_file_name == "led.train":
+		threshold = 0.0
+	elif train_file_name == "synthetic.social.train":
+		threshold = 0.0
+	else:
+		threshold = 0.0
+
+	# get label number
+	label_num = get_label_num(train_data)
+
 	# build decision tree
-	decision_tree = build_decision_tree(train_data)
+	decision_tree = build_decision_tree(train_data, threshold, label_num)
 
 	# predict testing data
 	prediction, accuracy = predict(test_data, decision_tree)
-
 	print(accuracy)
 
 
