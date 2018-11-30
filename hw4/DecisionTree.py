@@ -194,4 +194,24 @@ if __name__ == "__main__":
 			sys.stdout.write(str(confusion_matrix[i][j]) + " ")
 		sys.stdout.write("\n")
 
+	# get accuray
+	# accurate = 0
+	# for i in range(len(test_data)):
+	# 	if test_data[i][0] == prediction[i]:
+	# 		accurate = accurate + 1
+	# accuracy = float(accurate) / len(test_data)
+	# print(accuracy)
+
+	# get F-1 score
+	# for i in range(label_num):
+	# 	TP = confusion_matrix[i][i]
+	# 	FN = sum(confusion_matrix[i]) - TP
+	# 	FP = 0
+	# 	for j in range(label_num):
+	# 		FP = FP + confusion_matrix[j][i]
+	# 	FP = FP - TP
+	# 	F1 = float(2*TP/(2*TP+FN+FP))
+	# 	print(F1)
+
+
 
