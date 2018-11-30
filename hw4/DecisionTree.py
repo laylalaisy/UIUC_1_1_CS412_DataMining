@@ -129,18 +129,19 @@ def predict(test_data, decision_tree):
 				node = node.right
 		prediction.append(node.label)
 
-	return prediction, accuracy
+	return prediction
+
 
 def get_confusion_matrix(data, prediction):
 	label_set = set([sample[0] for sample in data])
 	label_num = len(label_set)
 
 	# initialize
-	line = []
 	matrix = []
 	for i in range(label_num):
+		line = []
 		for j in range(label_num):
-			line.append(0)
+			line.append(j)
 		matrix.append(line)
 
 	for i in range(len(data)):
@@ -148,7 +149,8 @@ def get_confusion_matrix(data, prediction):
 		predict = int(prediction[i])-1
 		matrix[true][predict] = matrix[true][predict] + 1
 
-	return matrix 
+	return label_num, matrix 
+
 
 
 if __name__ == "__main__":
@@ -184,6 +186,12 @@ if __name__ == "__main__":
 	prediction = predict(test_data, decision_tree)
 
 	# get confusion_matrix
-	confusion_matrix = get_confusion_matrix(test_data, prediction)
+	label_num, confusion_matrix = get_confusion_matrix(test_data, prediction)
+
+	# output confusion_matrix
+	for i in range(label_num):
+		for j in range(label_num):
+			sys.stdout.write(str(confusion_matrix[i][j]) + " ")
+		sys.stdout.write("\n")
 
 
