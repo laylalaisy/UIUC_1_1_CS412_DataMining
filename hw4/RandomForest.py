@@ -3,6 +3,9 @@ import os
 import random
 import threading
 
+lock = threading.Lock()
+prediction_list = []
+
 class DecisionTree:
 	def __init__(self, attr=None, value=None, left=None, right=None, data=None, label=None):
 		self.attr = attr
@@ -184,23 +187,18 @@ class Thread(threading.Thread):
 				sample.append(self.test_data[i][cur_idx[j]])
 			new_test_data.append(sample)
 
-		for i in range(len(self.train_data)):
-			print(new_train_data[i])
-		for i in range(len(self.test_data)):
-			print(new_test_data[i])
-
-				
-
 		# get label number
-		attr_num = get_attr_num(train_data)
-
-
+		attr_num = get_attr_num(new_train_data)
 
 		# build decision tree
-		decision_tree = build_decision_tree(train_data, threshold, attr_num)
+		decision_tree = build_decision_tree(new_train_data, self.threshold, attr_num)
 
 		# predict testing data
-		prediction = predict(test_data, decision_tree)
+		prediction = predict(new_test_data, decision_tree)
+
+		lock.acquire()
+		prediction_list.append(prediction)
+		lock.release()
 
 
 if __name__ == "__main__":
@@ -226,11 +224,20 @@ if __name__ == "__main__":
 	else:
 		threshold = 0.0
 
-	iter = 1
-	idx_num = 2
+	iter = 3		# iter times
+	idx_num = 2		# attribute number
+	thread_list = []
 	for i in range(iter):
 		thread = Thread(i, train_data, test_data, threshold, idx_num)
 		thread.start()
+		thread_list.append(thread)
+
+	for t in thread_list:
+		t.join()
+
+	for i in range(iter):
+		for j in range(len(test_data)):
+			print(prediction_list[i][j])
 
 
 	# # get confusion_matrix
