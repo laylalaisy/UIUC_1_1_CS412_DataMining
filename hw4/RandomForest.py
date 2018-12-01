@@ -200,6 +200,20 @@ class Thread(threading.Thread):
 		prediction_list.append(prediction)
 		lock.release()
 
+def vote(prediction_list):
+	iter_num = len(prediction_list)
+	sample_num = len(prediction_list[0])
+	prediction = []
+	for i in range(sample_num):
+		temp = []
+		for j in range(iter_num):
+			temp.append(prediction_list[j][i])
+		counts = get_counts(temp)
+		label = max(counts, key=counts.get)
+		prediction.append(label)
+
+	return prediction
+
 
 if __name__ == "__main__":
 	if len(sys.argv) != 3:
@@ -224,8 +238,9 @@ if __name__ == "__main__":
 	else:
 		threshold = 0.0
 
-	iter = 3		# iter times
-	idx_num = 2		# attribute number
+	iter = 100		# iter times
+	idx_num = 5		# attribute number
+
 	thread_list = []
 	for i in range(iter):
 		thread = Thread(i, train_data, test_data, threshold, idx_num)
@@ -235,38 +250,35 @@ if __name__ == "__main__":
 	for t in thread_list:
 		t.join()
 
-	for i in range(iter):
-		for j in range(len(test_data)):
-			print(prediction_list[i][j])
+	prediction = vote(prediction_list)
 
+	# get confusion_matrix
+	label_num, confusion_matrix = get_confusion_matrix(test_data, prediction)
 
-	# # get confusion_matrix
-	# label_num, confusion_matrix = get_confusion_matrix(test_data, prediction)
+	# output confusion_matrix
+	for i in range(label_num):
+		for j in range(label_num):
+			sys.stdout.write(str(confusion_matrix[i][j]) + " ")
+		sys.stdout.write("\n")
 
-	# # output confusion_matrix
-	# for i in range(label_num):
-	# 	for j in range(label_num):
-	# 		sys.stdout.write(str(confusion_matrix[i][j]) + " ")
-	# 	sys.stdout.write("\n")
+	# get accuray
+	accurate = 0
+	for i in range(len(test_data)):
+		if test_data[i][0] == prediction[i]:
+			accurate = accurate + 1
+	accuracy = float(accurate) / len(test_data)
+	print(accuracy)
 
-	# # get accuray
-	# accurate = 0
-	# for i in range(len(test_data)):
-	# 	if test_data[i][0] == prediction[i]:
-	# 		accurate = accurate + 1
-	# accuracy = float(accurate) / len(test_data)
-	# print(accuracy)
-
-	# # get F-1 score
-	# for i in range(label_num):
-	# 	TP = confusion_matrix[i][i]
-	# 	FN = sum(confusion_matrix[i]) - TP
-	# 	FP = 0
-	# 	for j in range(label_num):
-	# 		FP = FP + confusion_matrix[j][i]
-	# 	FP = FP - TP
-	# 	F1 = float(2*TP/(2*TP+FN+FP))
-	# 	print(F1)
+	# get F-1 score
+	for i in range(label_num):
+		TP = confusion_matrix[i][i]
+		FN = sum(confusion_matrix[i]) - TP
+		FP = 0
+		for j in range(label_num):
+			FP = FP + confusion_matrix[j][i]
+		FP = FP - TP
+		F1 = float(2*TP/(2*TP+FN+FP))
+		print(F1)
 
 
 
