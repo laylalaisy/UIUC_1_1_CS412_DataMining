@@ -1,5 +1,7 @@
 import sys
 import os
+import random
+import threading
 
 class DecisionTree:
 	def __init__(self, attr=None, value=None, left=None, right=None, data=None, label=None):
@@ -149,8 +151,56 @@ def get_confusion_matrix(data, prediction):
 		predict = int(prediction[i])-1
 		matrix[true][predict] = matrix[true][predict] + 1
 
-	return label_num, matrix 
+	return label_num, matrix
 
+class Thread(threading.Thread):
+	def __init__(self, ID, train_data, test_data, threshold, idx_num):
+		threading.Thread.__init__(self)
+		self.ID = ID
+		self.train_data = train_data
+		self.test_data = test_data
+		self.threshold = threshold
+		self.idx_num = idx_num
+
+	def run(self):
+		total_idx = []
+		for i in range(1, len(self.train_data[0])):
+			total_idx.append(i)
+		cur_idx = random.sample(total_idx, self.idx_num)
+
+		new_train_data = []
+		for i in range(len(self.train_data)):
+			sample = []
+			sample.append(self.train_data[i][0])
+			for j in range(self.idx_num):
+				sample.append(self.train_data[i][cur_idx[j]])
+			new_train_data.append(sample)
+
+		new_test_data = []
+		for i in range(len(self.test_data)):
+			sample = []
+			sample.append(self.test_data[i][0])
+			for j in range(self.idx_num):
+				sample.append(self.test_data[i][cur_idx[j]])
+			new_test_data.append(sample)
+
+		for i in range(len(self.train_data)):
+			print(new_train_data[i])
+		for i in range(len(self.test_data)):
+			print(new_test_data[i])
+
+				
+
+		# get label number
+		attr_num = get_attr_num(train_data)
+
+
+
+		# build decision tree
+		decision_tree = build_decision_tree(train_data, threshold, attr_num)
+
+		# predict testing data
+		prediction = predict(test_data, decision_tree)
 
 
 if __name__ == "__main__":
@@ -176,42 +226,40 @@ if __name__ == "__main__":
 	else:
 		threshold = 0.0
 
-	# get label number
-	attr_num = get_attr_num(train_data)
+	iter = 1
+	idx_num = 2
+	for i in range(iter):
+		thread = Thread(i, train_data, test_data, threshold, idx_num)
+		thread.start()
 
-	# build decision tree
-	decision_tree = build_decision_tree(train_data, threshold, attr_num)
 
-	# predict testing data
-	prediction = predict(test_data, decision_tree)
+	# # get confusion_matrix
+	# label_num, confusion_matrix = get_confusion_matrix(test_data, prediction)
 
-	# get confusion_matrix
-	label_num, confusion_matrix = get_confusion_matrix(test_data, prediction)
+	# # output confusion_matrix
+	# for i in range(label_num):
+	# 	for j in range(label_num):
+	# 		sys.stdout.write(str(confusion_matrix[i][j]) + " ")
+	# 	sys.stdout.write("\n")
 
-	# output confusion_matrix
-	for i in range(label_num):
-		for j in range(label_num):
-			sys.stdout.write(str(confusion_matrix[i][j]) + " ")
-		sys.stdout.write("\n")
+	# # get accuray
+	# accurate = 0
+	# for i in range(len(test_data)):
+	# 	if test_data[i][0] == prediction[i]:
+	# 		accurate = accurate + 1
+	# accuracy = float(accurate) / len(test_data)
+	# print(accuracy)
 
-	# get accuray
-	accurate = 0
-	for i in range(len(test_data)):
-		if test_data[i][0] == prediction[i]:
-			accurate = accurate + 1
-	accuracy = float(accurate) / len(test_data)
-	print(accuracy)
-
-	# get F-1 score
-	for i in range(label_num):
-		TP = confusion_matrix[i][i]
-		FN = sum(confusion_matrix[i]) - TP
-		FP = 0
-		for j in range(label_num):
-			FP = FP + confusion_matrix[j][i]
-		FP = FP - TP
-		F1 = float(2*TP/(2*TP+FN+FP))
-		print(F1)
+	# # get F-1 score
+	# for i in range(label_num):
+	# 	TP = confusion_matrix[i][i]
+	# 	FN = sum(confusion_matrix[i]) - TP
+	# 	FP = 0
+	# 	for j in range(label_num):
+	# 		FP = FP + confusion_matrix[j][i]
+	# 	FP = FP - TP
+	# 	F1 = float(2*TP/(2*TP+FN+FP))
+	# 	print(F1)
 
 
 
