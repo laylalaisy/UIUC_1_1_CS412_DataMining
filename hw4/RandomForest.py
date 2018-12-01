@@ -229,17 +229,24 @@ if __name__ == "__main__":
 
 	if train_file_name == "balance.scale.train":
 		threshold = 0.1
+		idx_num = 4
+		iter = 30
 	elif train_file_name == "nursery.train":
 		threshold = 0.0
+		idx_num = 8
+		iter = 30
 	elif train_file_name == "led.train":
 		threshold = 0.2
+		idx_num = 7
+		iter = 30
 	elif train_file_name == "synthetic.social.train":
 		threshold = 0.1
+		idx_num = 100
+		iter = 10
 	else:
 		threshold = 0.0
-
-	iter = 100		# iter times
-	idx_num = 5		# attribute number
+		iter = 10		# iter times
+		idx_num = random.randint(int((len(test_data[0])-1)/2), len(test_data[0])-1)	# attribute number
 
 	thread_list = []
 	for i in range(iter):
@@ -261,24 +268,25 @@ if __name__ == "__main__":
 			sys.stdout.write(str(confusion_matrix[i][j]) + " ")
 		sys.stdout.write("\n")
 
-	# get accuray
-	accurate = 0
-	for i in range(len(test_data)):
-		if test_data[i][0] == prediction[i]:
-			accurate = accurate + 1
-	accuracy = float(accurate) / len(test_data)
-	print(accuracy)
 
-	# get F-1 score
-	for i in range(label_num):
-		TP = confusion_matrix[i][i]
-		FN = sum(confusion_matrix[i]) - TP
-		FP = 0
-		for j in range(label_num):
-			FP = FP + confusion_matrix[j][i]
-		FP = FP - TP
-		F1 = float(2*TP/(2*TP+FN+FP))
-		print(F1)
+	# # get accuray
+	# accurate = 0
+	# for i in range(len(test_data)):
+	# 	if test_data[i][0] == prediction[i]:
+	# 		accurate = accurate + 1
+	# accuracy = float(accurate) / len(test_data)
+	# print(accuracy)
+
+	# # get F-1 score
+	# for i in range(label_num):
+	# 	TP = confusion_matrix[i][i]
+	# 	FN = sum(confusion_matrix[i]) - TP
+	# 	FP = 0
+	# 	for j in range(label_num):
+	# 		FP = FP + confusion_matrix[j][i]
+	# 	FP = FP - TP
+	# 	F1 = float(2*TP/(2*TP+FN+FP))
+	# 	print(F1)
 
 
 
