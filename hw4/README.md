@@ -1,3 +1,3 @@
 # HW4
-= Decision Tree
+- Decision Tree
 - Random Forest
