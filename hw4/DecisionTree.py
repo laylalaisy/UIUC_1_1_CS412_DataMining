@@ -11,9 +11,18 @@ class DecisionTree:
 		self.label = label
 
 
-def read_data(dir, file_name):
-	file_path = os.path.join(dir, file_name)
-	file = open(file_path, 'r')
+# def read_data(dir, file_name):
+# 	file_path = os.path.join(dir, file_name)
+# 	file = open(file_path, 'r')
+# 	lines = file.readlines()
+# 	data = []
+# 	for line in lines:
+# 		data.append(line.split())
+
+# 	return data
+
+def read_data(file_name):
+	file = open(file_name, 'r')
 	lines = file.readlines()
 	data = []
 	for line in lines:
@@ -161,9 +170,9 @@ if __name__ == "__main__":
 	test_file_name = sys.argv[2]
 
 	# read in data
-	dir = os.path.dirname(__file__)
-	train_data = read_data(dir, train_file_name)
-	test_data = read_data(dir, test_file_name)
+	# dir = os.path.dirname(__file__)
+	train_data = read_data(train_file_name)
+	test_data = read_data(test_file_name)
 
 	if train_file_name == "balance.scale.train":
 		threshold = 0.1
@@ -194,24 +203,24 @@ if __name__ == "__main__":
 			sys.stdout.write(str(confusion_matrix[i][j]) + " ")
 		sys.stdout.write("\n")
 
-	# get accuray
-	accurate = 0
-	for i in range(len(test_data)):
-		if test_data[i][0] == prediction[i]:
-			accurate = accurate + 1
-	accuracy = float(accurate) / len(test_data)
-	print(accuracy)
+	# # get accuray
+	# accurate = 0
+	# for i in range(len(test_data)):
+	# 	if test_data[i][0] == prediction[i]:
+	# 		accurate = accurate + 1
+	# accuracy = float(accurate) / len(test_data)
+	# print(accuracy)
 
-	# get F-1 score
-	for i in range(label_num):
-		TP = confusion_matrix[i][i]
-		FN = sum(confusion_matrix[i]) - TP
-		FP = 0
-		for j in range(label_num):
-			FP = FP + confusion_matrix[j][i]
-		FP = FP - TP
-		F1 = float(2*TP/(2*TP+FN+FP))
-		print(F1)
+	# # get F-1 score
+	# for i in range(label_num):
+	# 	TP = confusion_matrix[i][i]
+	# 	FN = sum(confusion_matrix[i]) - TP
+	# 	FP = 0
+	# 	for j in range(label_num):
+	# 		FP = FP + confusion_matrix[j][i]
+	# 	FP = FP - TP
+	# 	F1 = float(2*TP/(2*TP+FN+FP))
+	# 	print(F1)
 
 
 

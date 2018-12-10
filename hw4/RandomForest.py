@@ -16,9 +16,19 @@ class DecisionTree:
 		self.label = label
 
 
-def read_data(dir, file_name):
-	file_path = os.path.join(dir, file_name)
-	file = open(file_path, 'r')
+# def read_data(dir, file_name):
+# 	file_path = os.path.join(dir, file_name)
+# 	file = open(file_path, 'r')
+# 	lines = file.readlines()
+# 	data = []
+# 	for line in lines:
+# 		data.append(line.split())
+
+# 	return data
+
+
+def read_data(file_name):
+	file = open(file_name, 'r')
 	lines = file.readlines()
 	data = []
 	for line in lines:
@@ -223,22 +233,22 @@ if __name__ == "__main__":
 	test_file_name = sys.argv[2]
 
 	# read in data
-	dir = os.path.dirname(__file__)
-	train_data = read_data(dir, train_file_name)
-	test_data = read_data(dir, test_file_name)
+	# dir = os.path.dirname(__file__)
+	train_data = read_data(train_file_name)
+	test_data = read_data(test_file_name)
 
 	if train_file_name == "balance.scale.train":
 		threshold = 0.1
 		idx_num = 4
-		iter = 30
+		iter = 20
 	elif train_file_name == "nursery.train":
 		threshold = 0.0
-		idx_num = 8
-		iter = 30
+		idx_num = 7
+		iter = 20
 	elif train_file_name == "led.train":
 		threshold = 0.2
-		idx_num = 7
-		iter = 30
+		idx_num = 6
+		iter = 20
 	elif train_file_name == "synthetic.social.train":
 		threshold = 0.1
 		idx_num = 100
@@ -267,7 +277,6 @@ if __name__ == "__main__":
 		for j in range(label_num):
 			sys.stdout.write(str(confusion_matrix[i][j]) + " ")
 		sys.stdout.write("\n")
-
 
 	# # get accuray
 	# accurate = 0
