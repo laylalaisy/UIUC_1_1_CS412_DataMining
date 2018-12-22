@@ -1,11 +1,5 @@
 # Homework 1
 
-Name: Shuyue Lai
-
-NetID: shuyuel2
-
-
-
 ## Problem 1 Statistical Properties
 
 ##### (a) Max and min:
